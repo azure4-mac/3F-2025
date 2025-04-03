@@ -1,9 +1,16 @@
+### Requisição GET para obter o histórico
+GET http://127.0.0.1:5000/historico
+Content-Type: application/json
+
+### Requisição POST para somar dois números
 POST http://127.0.0.1:5000/soma
 Content-Type: application/json
 
 {
-    "Numero 1:": 10,
-    "Numero 2:": 5
+  "Numero 1:": 37,
+  "Numero 2:": 8
 }
-###
-GET http://127.0.0.1:5000/historico
+
+### Requisição DELETE para apagar um item do histórico pelo ID
+DELETE http://127.0.0.1:5000/historico/1
+Content-Type: application/json

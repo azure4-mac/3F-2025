@@ -1,0 +1,24 @@
+GET  http://127.0.0.1:5000/
+
+###
+POST  http://127.0.0.1:5000/
+Content-Type: application/json
+
+{
+
+}
+###
+PUT http://127.0.0.1:5000/
+Content-Type: application/json
+
+{
+
+}
+
+###
+DELETE http://127.0.0.1:5000/
+Content-Type: application/json
+
+{
+
+}
