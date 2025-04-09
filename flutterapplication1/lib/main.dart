@@ -82,59 +82,57 @@ class TelaInicial extends StatelessWidget {
 
 class TelaCadastro extends StatefulWidget {
   @override
-  _TelaCadastroState createState() => _TelaCadastroState();
+  State<StatefulWidget> createState() {
+    return _TelaCadastroState();
+  }
 }
 
 class _TelaCadastroState extends State<TelaCadastro> {
-  final List<Map<String, String>> _itens = [];
-  final TextEditingController _nomeController = TextEditingController();
-  final TextEditingController _precoController = TextEditingController();
-
-  void _adicionarItem() {
-    setState(() {
-      _itens.add({
-        'nome': _nomeController.text,
-        'preco': _precoController.text,
-      });
-      _nomeController.clear();
-      _precoController.clear();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro de Itens'),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit_outlined))
+        ],
         backgroundColor: Colors.grey,
+        title: Center(
+            child:
+                Text("Cadastro Item", style: TextStyle(color: Colors.black))),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: _nomeController,
-              decoration: InputDecoration(labelText: 'Nome do Item'),
+              decoration: InputDecoration(
+                labelText: 'Quantidade',
+                border: OutlineInputBorder(),
+              ),
             ),
+            SizedBox(height: 16),
             TextField(
-              controller: _precoController,
-              decoration: InputDecoration(labelText: 'Preço'),
+              decoration: InputDecoration(
+                labelText: 'Nome',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Custo',
+                border: OutlineInputBorder(),
+              ),
               keyboardType: TextInputType.number,
             ),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _adicionarItem,
-              child: Text('Adicionar Item'),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _itens.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(_itens[index]['nome']!),
-                    subtitle: Text('Preço: ${_itens[index]['preco']}'),
-                  );
-                },
-              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(const SnackBar(content: Text('Dado Salvo')));
+              },
+              child: Text("Enviar"),
             ),
           ],
         ),
