@@ -6,88 +6,48 @@ void main() {
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: TelaInicial()));
 }
 
-class TelaInicial extends StatelessWidget {
+class TelaInicial extends StatefulWidget {
+  @override
+  State<TelaInicial> createState() => _TelaInicialState();
+}
+
+class _TelaInicialState extends State<TelaInicial> {
+  List<Produto> produtos = [Produto('Abacaxi', '10,00', '50')];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit_outlined))
-        ],
-        backgroundColor: Colors.grey,
-        title: Center(
-            child:
-                Text("Mensagens Bruno", style: TextStyle(color: Colors.black))),
-        leading: Icon(
-          Icons.account_balance_sharp,
-          color: Colors.black,
-          size: 50.1,
+        appBar: AppBar(
+          actions: [
+            IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit_outlined))
+          ],
+          backgroundColor: Colors.grey,
+          title: Center(
+              child: Text("Produtos", style: TextStyle(color: Colors.black))),
         ),
-      ),
-      body: GridView.count(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        crossAxisCount: 2,
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.teal[100],
-            child: const Text("He'd have you all unravel at the"),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.teal[200],
-            child: const Text('Heed not the rabble'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.teal[300],
-            child: const Text('Sound of screams but the'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.teal[400],
-            child: const Text('Who scream'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.teal[500],
-            child: const Text('Revolution is coming...'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.teal[600],
-            child: const Text('Revolution, they...'),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TelaCadastro()),
-          );
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.black,
-      ),
-    );
+        body: ListView.builder(
+            itemCount: produtos.length,
+            itemBuilder: (context, index) {
+              return Text(produtos[index].nome);
+            }),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              //Tela de Cadastro
+              Navigator.push(context,
+                      MaterialPageRoute(builder: ((context) => TelaCadastro())))
+                  .then((p) {
+                setState(() 
+                {produtos.add(p);});
+              });
+            },
+            child: Icon(Icons.add)));
   }
 }
 
-class TelaCadastro extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _TelaCadastroState();
-  }
-}
-
-class _TelaCadastroState extends State<TelaCadastro> {
+class TelaCadastro extends StatelessWidget {
+  final TextEditingController _controllernome = TextEditingController();
+  final TextEditingController _controllerpreco = TextEditingController();
+  final TextEditingController _controllerqtd = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,37 +66,51 @@ class _TelaCadastroState extends State<TelaCadastro> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              decoration: InputDecoration(
-                labelText: 'Quantidade',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
+                controller: _controllernome,
+                decoration: InputDecoration(labelText: "Nome")),
             TextField(
-              decoration: InputDecoration(
-                labelText: 'Nome',
-                border: OutlineInputBorder(),
-              ),
+              controller: _controllerpreco,
+              decoration: InputDecoration(labelText: "Preço"),
             ),
-            SizedBox(height: 16),
             TextField(
-              decoration: InputDecoration(
-                labelText: 'Custo',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
+              controller: _controllerqtd,
+              decoration: InputDecoration(labelText: "Quantidade"),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text('Dado Salvo')));
-              },
-              child: Text("Enviar"),
-            ),
+            Row(
+              children: [
+                ElevatedButton(
+                    onPressed: (() {
+                      _controllernome.text = "";
+                      _controllerpreco.text = "";
+                      _controllerqtd.text = "";
+                    }),
+                    child: Text("Limpar")),
+                ElevatedButton(
+                    onPressed: (() {
+                      _controllernome.text;
+                      _controllerpreco.text;
+                      _controllerqtd.text;
+                      Produto p = Produto(
+                        _controllernome.text,
+                        _controllerpreco.text,
+                        _controllerqtd.text,
+                      );
+                      Navigator.pop(context, p);
+                    }),
+                    child: Text("Salvar"))
+              ],
+            )
           ],
         ),
       ),
     );
   }
+}
+
+class Produto {
+  String nome;
+  String preco;
+  String qtd;
+
+  Produto(this.nome, this.preco, this.qtd);
 }
