@@ -12,7 +12,7 @@ class TelaInicial extends StatefulWidget {
 }
 
 class _TelaInicialState extends State<TelaInicial> {
-  List<Produto> produtos = [Produto('Abacaxi', '10,00', '50')];
+  List<Produto> produtos = [];
 
   @override
   Widget build(BuildContext context) {
@@ -94,16 +94,15 @@ class TelaCadastro extends StatelessWidget {
                     }),
                     child: Text("Limpar")),
                 ElevatedButton(
-                    onPressed: (() {
-                      _controllernome.text;
-                      _controllerpreco.text;
-                      _controllerqtd.text;
-                      Produto p = Produto(
+                    onPressed: (() { 
+                      if(_controllernome.text != "" && _controllerpreco.text != "" && _controllerqtd.text !=""){
+                        Produto p = Produto(
                         _controllernome.text,
                         _controllerpreco.text,
                         _controllerqtd.text,
                       );
                       Navigator.pop(context, p);
+                      }
                     }),
                     child: Text("Salvar"))
               ],
