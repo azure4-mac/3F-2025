@@ -30,7 +30,13 @@ class _TelaInicialState extends State<TelaInicial> {
             itemBuilder: (context, index) {
               // return Text(produtos[index].nome);
               return Card(child: ListTile(title: Text(produtos[index].nome),
-              subtitle: Text("R\$ ${produtos[index].preco} Quantidade: ${produtos[index].qtd}")));
+              subtitle: Text("R\$ ${produtos[index].preco} Quantidade: ${produtos[index].qtd}"),
+              trailing: IconButton(onPressed: () {
+                setState(() {
+                  produtos.removeAt(index);
+                });
+              }, icon: Icon(Icons.delete),),
+              ));
             }),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
