@@ -28,7 +28,9 @@ class _TelaInicialState extends State<TelaInicial> {
         body: ListView.builder(
             itemCount: produtos.length,
             itemBuilder: (context, index) {
-              return Text(produtos[index].nome);
+              // return Text(produtos[index].nome);
+              return Card(child: ListTile(title: Text(produtos[index].nome),
+              subtitle: Text("R\$ ${produtos[index].preco} Quantidade: ${produtos[index].qtd}")));
             }),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
