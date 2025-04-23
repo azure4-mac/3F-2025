@@ -3,7 +3,6 @@ import uuid
 import psycopg
 
 app = Flask(name)
-connection_db = psycopg.connect("dbname=turma3f user=postgres password=3f@db host=164.90.152.205 port=80")
 
 @app.route("/pessoas", methods=["POST"])
 def incluir_pessoa():
