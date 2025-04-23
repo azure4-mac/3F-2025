@@ -1,40 +1,78 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
+import uuid
+import psycopg
 
-app = Flask(__name__)
+app = Flask(name)
+connection_db = psycopg.connect("dbname=turma3f user=postgres password=3f@db host=164.90.152.205 port=80")
 
-lista_alunos = [
-    {"id": 1, "name": "azure"},
-    {"id": 2, "name": "gui"},
-    {"id": 3, "name": "js"},
-    {"id": 4, "name": "mezzo"},
-]
+@app.route("/pessoas", methods=["POST"])
+def incluir_pessoa():
+    dados_recebidos = request.get_json()
+    id = uuid.uuid4()
+    nome = dados_recebidos["nome"]
 
-@app.route("/", methods=["GET"])
-def listar():
-    return jsonify(lista_alunos)
-
-@app.route("/", methods=["POST"])
-def adicionar():
-    novo_aluno = request.json
-    lista_alunos.append(novo_aluno)
-    return jsonify(novo_aluno)
-
-@app.route("/", methods=["PUT"])
-def atualizar():
-    dados = request.json
-    for aluno in lista_alunos:
-        if aluno["id"] == dados["id"]:
-            aluno.update(dados)
-            return jsonify(aluno)
-    return jsonify({"erro": "Aluno não encontrado"})
-
-@app.route("/", methods=["DELETE"])
-def deletar():
-    dados = request.json
-    global lista_alunos
-    lista_alunos = [a for a in lista_alunos if a["id"] != dados["id"]]
-    return jsonify({"mensagem": "Aluno removido"})
+    cursor = connection_db.cursor()
+    cursor.execute(
+        "INSERT INTO pessoas (id, nome) VALUES (%s, %s)",
+        (id, nome)
+    )
+    connection_db.commit()
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+    return {
+        'id': id
+    }
+
+@app.route("/pessoas", methods=["GET"])
+def get_pessoas():
+    cursor = connection_db.cursor()
+    cursor.execute("select id, nome from pessoas order by nome")
+
+    lista = []
+    for item in cursor:
+        lista.append({
+            'id': item[0],
+            'nome': item[1]
+        })
+
+    return lista
+
+@app.route("/pessoas/<id>", methods=["PUT"])
+def atualizar_pessoas(id):
+    dados_recebidos = request.get_json()
+    nome = dados_recebidos["nome"]
+
+    cursor = connection_db.cursor()
+    cursor.execute(
+        "UPDATE pessoas SET nome = %s WHERE id = %s",
+        (nome, id)
+    )
+    connection_db.commit()
+
+    return {
+        'id': id,
+        'nome': nome
+    }
+
+@app.route("/vendas", methods=["GET"])
+def get_vendas():
+    cursor = connection_db.cursor()
+    cursor.execute('''select *'
+left join pessoas on vendas.id_pessoa = pessoas.id
+left join produtos on vendas.id_produto = produtos.id''')
+
+    lista = []
+    for item in cursor:
+        lista.append({
+            'id': item[0],
+            'pessoa': {
+                'id': item[1],
+                'nome': item[4]
+            },
+            'produto': {
+                'id': item[2],
+                'nome': item[6],
+                'preco': item[7]
+            }
+        })
+﻿
