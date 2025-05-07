@@ -35,7 +35,8 @@ class _TelaInicialState extends State<TelaInicial> {
                 setState(() {
                   produtos.removeAt(index);
                 });
-              }, icon: Icon(Icons.delete),),
+              }, icon: Icon(Icons.delete),
+              color: Colors.red,),
               ));
             }),
         floatingActionButton: FloatingActionButton(
