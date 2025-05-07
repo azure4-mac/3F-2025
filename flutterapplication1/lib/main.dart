@@ -1,5 +1,4 @@
 import 'dart:html';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -28,8 +27,8 @@ class _TelaInicialState extends State<TelaInicial> {
         body: ListView.builder(
             itemCount: produtos.length,
             itemBuilder: (context, index) {
-              // return Text(produtos[index].nome);
               return Card(child: ListTile(title: Text(produtos[index].nome),
+              leading: Image.asset("snowflake.jpg"),
               subtitle: Text("R\$ ${produtos[index].preco} Quantidade: ${produtos[index].qtd}"),
               trailing: IconButton(onPressed: () {
                 setState(() {
