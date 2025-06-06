@@ -1,123 +1,34 @@
-import 'dart:html';
 import 'package:flutter/material.dart';
+import 'package:flutterapplication1/dao/dogdao.dart';
+import 'package:flutterapplication1/model/dogmodel.dart';
 
-void main() {
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: TelaInicial()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Dog meucachorro = Dog(id: 1, name: 'Rex', idade: 5);
+  debugPrint('Criando Cachorro...');
+  await insertDog(meucachorro);
+  List<Dog> dogs = List<Dog>.from(await findAll());
+  debugPrint('Lendo Cachorros: $dogs');
+
+  runApp(MyApp());
 }
 
-class TelaInicial extends StatefulWidget {
-  @override
-  State<TelaInicial> createState() => _TelaInicialState();
-}
-
-class _TelaInicialState extends State<TelaInicial> {
-  List<Produto> produtos = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit_outlined))
-          ],
-          backgroundColor: Colors.grey,
-          title: Center(
-              child: Text("Produtos", style: TextStyle(color: Colors.black))),
-        ),
-        body: ListView.builder(
-            itemCount: produtos.length,
-            itemBuilder: (context, index) {
-              return Card(child: ListTile(title: Text(produtos[index].nome),
-              leading: Image.asset("snowflake.jpg"),
-              subtitle: Text("R\$ ${produtos[index].preco} Quantidade: ${produtos[index].qtd}"),
-              trailing: IconButton(onPressed: () {
-                setState(() {
-                  produtos.removeAt(index);
-                });
-              }, icon: Icon(Icons.delete),
-              color: Colors.red,),
-              ));
-            }),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              //Tela de Cadastro
-              Navigator.push(context,
-                      MaterialPageRoute(builder: ((context) => TelaCadastro())))
-                  .then((p) {
-                setState(() 
-                {produtos.add(p);});
-              });
-            },
-            child: Icon(Icons.add)));
-  }
-}
-
-class TelaCadastro extends StatelessWidget {
-  final TextEditingController _controllernome = TextEditingController();
-  final TextEditingController _controllerpreco = TextEditingController();
-  final TextEditingController _controllerqtd = TextEditingController();
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit_outlined))
-        ],
-        backgroundColor: Colors.grey,
-        title: Center(
-            child:
-                Text("Cadastro Item", style: TextStyle(color: Colors.black))),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-                controller: _controllernome,
-                decoration: InputDecoration(labelText: "Nome")),
-            TextField(
-              controller: _controllerpreco,
-              decoration: InputDecoration(labelText: "Preço"),
-            ),
-            TextField(
-              controller: _controllerqtd,
-              decoration: InputDecoration(labelText: "Quantidade"),
-            ),
-            Row(
-              children: [
-                ElevatedButton(
-                    onPressed: (() {
-                      _controllernome.text = "";
-                      _controllerpreco.text = "";
-                      _controllerqtd.text = "";
-                    }),
-                    child: Text("Limpar")),
-                ElevatedButton(
-                    onPressed: (() { 
-                      if(_controllernome.text != "" && _controllerpreco.text != "" && _controllerqtd.text !=""){
-                        Produto p = Produto(
-                        _controllernome.text,
-                        _controllerpreco.text,
-                        _controllerqtd.text,
-                      );
-                      Navigator.pop(context, p);
-                      }
-                    }),
-                    child: Text("Salvar"))
-              ],
-            )
-          ],
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Flutter Application'),
+        ),
+        body: Center(
+          child: Text('Cachorro inserido com sucesso!'),
         ),
       ),
     );
   }
-}
-
-class Produto {
-  String nome;
-  String preco;
-  String qtd;
-
-  Produto(this.nome, this.preco, this.qtd);
 }
