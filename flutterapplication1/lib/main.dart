@@ -22,25 +22,43 @@ void main() async {
     debugPrint('Cachorro criado com sucesso!!');
   });
 
-  runApp(MyApp());
+  runApp(MaterialApp(home: TelaInicial()));
 }
 
-class MyApp extends StatelessWidget {
+class TelaInicial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Flutter Application'),
-        ),
-        body: Center(
-          child: Text('Cachorro inserido com sucesso!'),
-        ),
-      ),
+    return Scaffold(
+      body: FutureBuilder(
+          initialData: [],
+          future: findAll(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return const Center(child: CircularProgressIndicator());
+              case ConnectionState.active:
+                return const Center(child: CircularProgressIndicator());
+              case ConnectionState.none:
+                return const Center(
+                  child: Text("Erro na conexão."),
+                );
+              case ConnectionState.done:
+                List<Map> dogs = snapshot.data as List<Map>;
+                return ListView.builder(
+                  itemCount: dogs.length,
+                  itemBuilder: (context, index) {
+                    final nome = dogs[index]['nome'];
+                    final idade = dogs[index]['idade'];
+                    return ListTile(
+                      title: Text(nome is String ? nome : 'Sem nome'),
+                      subtitle: Text(idade != null
+                          ? idade.toString()
+                          : 'Idade desconhecida'),
+                    );
+                  },
+                );
+            }
+          }),
     );
   }
 }
