@@ -1,14 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutterapplication1/dao/dogdao.dart';
 import 'package:flutterapplication1/model/dogmodel.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() async {
+  if (Platform.isWindows || Platform.isLinux) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
   Dog meucachorro = Dog(id: 1, name: 'Rex', idade: 5);
   debugPrint('Criando Cachorro...');
   await insertDog(meucachorro);
-  List<Dog> dogs = List<Dog>.from(await findAll());
-  debugPrint('Lendo Cachorros: $dogs');
+  findAll().then((dados) {
+    for (Map<dynamic, dynamic> dado in dados) {
+      debugPrint("Item: $dado");
+    }
+  });
 
   runApp(MyApp());
 }
