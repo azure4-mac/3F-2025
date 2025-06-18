@@ -25,7 +25,12 @@ void main() async {
   runApp(MaterialApp(home: TelaInicial()));
 }
 
-class TelaInicial extends StatelessWidget {
+class TelaInicial extends StatefulWidget {
+  @override
+  State<TelaInicial> createState() => _TelaInicialState();
+}
+
+class _TelaInicialState extends State<TelaInicial> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +59,11 @@ class TelaInicial extends StatelessWidget {
                       subtitle: Text(idade != null
                           ? idade.toString()
                           : 'Idade desconhecida'),
-                      trailing: IconButton(onPressed: () {deleteById(id)}, icon: Icon(Icons.delete)),
+                      trailing: IconButton(
+                          onPressed: () {
+                            deleteById(dogs[index]['id']);
+                          },
+                          icon: Icon(Icons.delete)),
                     );
                   },
                 );
