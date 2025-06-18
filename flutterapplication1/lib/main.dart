@@ -54,6 +54,7 @@ class TelaInicial extends StatelessWidget {
                       subtitle: Text(idade != null
                           ? idade.toString()
                           : 'Idade desconhecida'),
+                      trailing: IconButton(onPressed: () {deleteById(id)}, icon: Icon(Icons.delete)),
                     );
                   },
                 );
