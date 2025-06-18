@@ -1,5 +1,5 @@
 class Dog {
-  int id;
+  int? id;
   String name;
   int idade;
 
